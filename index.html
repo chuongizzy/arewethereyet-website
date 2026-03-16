@@ -18,15 +18,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Changed to 'safe center' so content doesn't cut off if it's too tall */
-            justify-content: center; 
+            justify-content: center;
             min-height: 100vh;
             margin: 0;
-            padding: 40px 20px; /* More padding for landscape scrolling */
+            padding: 20px;
             text-align: center;
-            /* FIX: Allow vertical scroll but hide horizontal mess from truck */
-            overflow-x: hidden; 
-            overflow-y: auto;
+            overflow: hidden;
             box-sizing: border-box;
         }
 
@@ -60,8 +57,10 @@
             100% { transform: rotate(5deg); }
         }
 
+        /* NEW STREAK ANIMATION */
         .driving-away {
             animation: fly-off 0.8s forwards ease-in !important;
+            /* Creates the speed streak behind the truck */
             filter: drop-shadow(-20px 0px 10px rgba(255,255,255,0.4)) 
                     drop-shadow(-40px 0px 20px rgba(255,255,255,0.2)) !important;
             pointer-events: none;
@@ -73,6 +72,7 @@
             31% { transform: translateX(180vw) scale(1.3); }
             70% { 
                 transform: translateX(-180vw) scale(1.6);
+                /* Flip shadow direction for the return pass */
                 filter: drop-shadow(40px 0px 30px rgba(255,255,255,0.5)); 
             }
             100% { transform: translateX(-220vw) scale(2); }
@@ -114,9 +114,12 @@
         #eta-text { 
             display: block; 
             color: #B92432; 
+            /* Reduced the size slightly to ensure it fits on one line */
             font-size: clamp(1.8rem, 7.5vw, 4.2rem); 
             margin-top: 10px;
+            /* Tightened the letters slightly for a cleaner fit */
             letter-spacing: 0px; 
+            /* Prevents the text from ever wrapping to a new line */
             white-space: nowrap; 
         }
     </style>
