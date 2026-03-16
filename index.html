@@ -6,7 +6,6 @@
     <title>ARE WE THERE YET? Tour</title>
 
     <style>
-        /* 1. CUSTOM FONT */
         @font-face {
             font-family: 'MyCustomFont'; 
             src: url('YOUR-FONT-FILE.ttf') format('truetype'); 
@@ -22,27 +21,35 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px; /* Buffer for mobile screens */
+            padding: 20px;
             text-align: center;
             overflow: hidden;
             box-sizing: border-box;
         }
 
-        /* 2. RESPONSIVE TITLE */
-        .title-img {
-            width: 80%;       /* Takes up 80% of the screen on mobile */
-            max-width: 600px; /* Never gets bigger than 600px on desktop */
-            height: auto;     /* Keeps original proportions */
-            margin-bottom: 40px; 
+        .title-link {
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 50px;
+            cursor: pointer;
+            display: inline-block;
+            transition: opacity 0.2s ease;
         }
 
-        /* 3. TRUCK */
+        .title-link:hover {
+            opacity: 0.7;
+        }
+
+        .title-img { width: 100%; height: auto; }
+
         .uhaul-truck {
             width: 60%;
             max-width: 350px;
             height: auto;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            cursor: pointer;
             animation: jerk-rotate 0.3s infinite steps(2);
+            transition: filter 0.1s ease-out;
         }
 
         @keyframes jerk-rotate {
@@ -50,50 +57,130 @@
             100% { transform: rotate(5deg); }
         }
 
-        /* 4. RESPONSIVE COUNTDOWN TEXT */
-        #countdown-text {
+        /* NEW STREAK ANIMATION */
+        .driving-away {
+            animation: fly-off 0.8s forwards ease-in !important;
+            /* Creates the speed streak behind the truck */
+            filter: drop-shadow(-20px 0px 10px rgba(255,255,255,0.4)) 
+                    drop-shadow(-40px 0px 20px rgba(255,255,255,0.2)) !important;
+            pointer-events: none;
+        }
+
+        @keyframes fly-off {
+            0% { transform: translateX(0) scale(1); }
+            30% { transform: translateX(-180vw) scale(1); }
+            31% { transform: translateX(180vw) scale(1.3); }
+            70% { 
+                transform: translateX(-180vw) scale(1.6);
+                /* Flip shadow direction for the return pass */
+                filter: drop-shadow(40px 0px 30px rgba(255,255,255,0.5)); 
+            }
+            100% { transform: translateX(-220vw) scale(2); }
+        }
+
+        #countdown-container {
             font-family: 'MyCustomFont', sans-serif;
-            /* Scalable size: Adjusts based on viewport width (vw) */
-            font-size: clamp(2.5rem, 8vw, 5rem); 
-            color: #B92432;
             text-transform: uppercase;
             letter-spacing: 2px;
+            line-height: 1.2;
         }
-    </style>
 
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e);
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net');
-    fbq('init', 'YOUR_PIXEL_ID_HERE'); 
-    fbq('track', 'PageView');
-    </script>
+        .header-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .arriving-text { color: #B92432; font-size: clamp(2rem, 5vw, 3.5rem); }
+
+        .city-box {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .city-box:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        #eta-text { color: #B92432; font-size: clamp(2.5rem, 8vw, 5rem); margin-top: 10px; }
+    </style>
+    
+    <!-- Meta Pixel Code Here... -->
 </head>
 <body>
 
-    <img src="title.png" alt="ARE WE THERE YET? Tour" class="title-img">
-    <img src="uhaul.png" alt="U-Haul Truck" class="uhaul-truck">
-    <div id="countdown-text">ARRIVING IN 3</div>
+    <a href="https://beacons.ai/arewethereyet.tours" target="_blank" class="title-link">
+        <img src="title.png" alt="ARE WE THERE YET? Tour" class="title-img">
+    </a>
+
+    <img src="uhaul.png" alt="U-Haul Truck" class="uhaul-truck" id="truck" onclick="driveAway()">
+    
+    <div id="countdown-container">
+        <div class="header-wrapper">
+            <span class="arriving-text">ARRIVING IN</span>
+            <a id="city-link" class="city-box" target="_blank">...</a>
+        </div>
+        <div id="eta-text">ETA: 00D 00H 00M 00S</div>
+    </div>
 
     <script>
-        let timeLeft = 3;
-        const countdownElement = document.getElementById('countdown-text');
-        const targetUrl = "https://beacons.ai/arewethereyet.tours";
+        function driveAway() {
+            const truck = document.getElementById('truck');
+            truck.classList.add('driving-away');
+            setTimeout(() => {
+                window.location.href = "https://beacons.ai/arewethereyet.tours";
+            }, 750);
+        }
 
-        const timer = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0) {
-                countdownElement.innerText = "ARRIVING IN " + timeLeft;
-            } else {
-                clearInterval(timer);
-                window.location.href = targetUrl;
+        const tourSchedule = [
+            { city: "MILWAUKEE, WI", date: "2026-03-21T12:00:00-05:00", link: "https://www.passionparkent.com/event-details-registration/passion-park-fest-2026" },
+            { city: "MILWAUKEE, WI", date: "2026-03-27T21:00:00-05:00", link: "https://partiful.com/e/x4jq7PgWMfS36XjRg1H6?accept-cohost=e0cff1b1-f67b-4a18-932e-dfc5d937afde" },
+            { city: "CHICAGO, IL",   date: "2026-03-28T21:00:00-05:00", link: "https://getpie.app/plans/cfd582d2-75f1-4470-89b9-dc0eeee445b4?inviter=c80b97c0-52d5-11f0-84e8-2fc773811bb4&utm_campaign=event&utm_link_source=pie&utm_platform=web" },
+            { city: "MONTREAL, QC",  date: "2026-04-02T20:00:00-04:00", link: "https://luma.com/qgdzzdha" },
+            { city: "TORONTO, ON",   date: "2026-04-04T21:00:00-04:00", link: "https://luma.com/bxrgi2yo" }
+        ];
+
+        const cityLinkElement = document.getElementById('city-link');
+        const etaTextElement = document.getElementById('eta-text');
+
+        function updateTourCountdown() {
+            const now = new Date().getTime();
+            let nextShow = tourSchedule.find(show => new Date(show.date).getTime() > now);
+
+            if (!nextShow) {
+                document.getElementById('countdown-container').innerHTML = '<div class="arriving-text" style="font-size: 4rem;">TOUR COMPLETE</div>';
+                return;
             }
-        }, 1000);
+
+            const showTime = new Date(nextShow.date).getTime();
+            const timeLeft = showTime - now;
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            cityLinkElement.innerText = nextShow.city;
+            cityLinkElement.href = nextShow.link;
+            etaTextElement.innerText = `ETA: ${days}D ${hours}H ${minutes}M ${seconds}S`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                window.location.href = "https://beacons.ai/arewethereyet.tours";
+            }
+        }
+
+        const timerInterval = setInterval(updateTourCountdown, 1000);
+        updateTourCountdown();
     </script>
 </body>
 </html>
