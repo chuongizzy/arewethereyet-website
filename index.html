@@ -111,7 +111,17 @@
             background-color: rgba(255, 255, 255, 0.35);
         }
 
-        #eta-text { color: #B92432; font-size: clamp(2.5rem, 8vw, 5rem); margin-top: 10px; }
+        #eta-text { 
+            display: block; 
+            color: #B92432; 
+            /* Reduced the size slightly to ensure it fits on one line */
+            font-size: clamp(1.8rem, 7.5vw, 4.2rem); 
+            margin-top: 10px;
+            /* Tightened the letters slightly for a cleaner fit */
+            letter-spacing: 0px; 
+            /* Prevents the text from ever wrapping to a new line */
+            white-space: nowrap; 
+        }
     </style>
     
     <!-- Meta Pixel Code Here... -->
