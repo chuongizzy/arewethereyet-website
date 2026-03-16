@@ -13,33 +13,40 @@
             font-display: swap;
         }
 
+        /* FIX: Remove justify-content: center to avoid the "Scroll Trap" */
         body {
             background-color: #181818;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            min-height: 100vh; /* Allow it to grow beyond 100vh */
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
-            overflow: hidden;
+            overflow-x: hidden; /* Hide truck mess */
+            overflow-y: auto;   /* Enable vertical scrolling */
             box-sizing: border-box;
         }
 
+        /* 1. FLEX SPACING TRICK: Pushes content to the center without breaking scroll */
         .title-link {
+            margin-top: auto; 
             width: 80%;
             max-width: 600px;
             margin-bottom: 50px;
             cursor: pointer;
-            display: inline-block;
             transition: opacity 0.2s ease;
         }
 
-        .title-link:hover {
-            opacity: 0.7;
+        #countdown-container {
+            margin-bottom: auto; /* Balances the top margin to keep things centered */
+            font-family: 'MyCustomFont', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
         }
 
+        .title-link:hover { opacity: 0.7; }
         .title-img { width: 100%; height: auto; }
 
         .uhaul-truck {
@@ -57,10 +64,8 @@
             100% { transform: rotate(5deg); }
         }
 
-        /* NEW STREAK ANIMATION */
         .driving-away {
             animation: fly-off 0.8s forwards ease-in !important;
-            /* Creates the speed streak behind the truck */
             filter: drop-shadow(-20px 0px 10px rgba(255,255,255,0.4)) 
                     drop-shadow(-40px 0px 20px rgba(255,255,255,0.2)) !important;
             pointer-events: none;
@@ -72,17 +77,9 @@
             31% { transform: translateX(180vw) scale(1.3); }
             70% { 
                 transform: translateX(-180vw) scale(1.6);
-                /* Flip shadow direction for the return pass */
                 filter: drop-shadow(40px 0px 30px rgba(255,255,255,0.5)); 
             }
             100% { transform: translateX(-220vw) scale(2); }
-        }
-
-        #countdown-container {
-            font-family: 'MyCustomFont', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            line-height: 1.2;
         }
 
         .header-wrapper {
@@ -107,28 +104,20 @@
             transition: background-color 0.2s ease;
         }
 
-        .city-box:hover {
-            background-color: rgba(255, 255, 255, 0.35);
-        }
+        .city-box:hover { background-color: rgba(255, 255, 255, 0.35); }
 
         #eta-text { 
             display: block; 
             color: #B92432; 
-            /* Reduced the size slightly to ensure it fits on one line */
             font-size: clamp(1.8rem, 7.5vw, 4.2rem); 
             margin-top: 10px;
-            /* Tightened the letters slightly for a cleaner fit */
             letter-spacing: 0px; 
-            /* Prevents the text from ever wrapping to a new line */
             white-space: nowrap; 
         }
     </style>
-    
-    <!-- Meta Pixel Code Here... -->
 </head>
 <body>
-
-    <a href="https://beacons.ai/arewethereyet.tours" target="_blank" class="title-link">
+    <a href="https://beacons.ai" target="_blank" class="title-link">
         <img src="title.png" alt="ARE WE THERE YET? Tour" class="title-img">
     </a>
 
@@ -147,16 +136,16 @@
             const truck = document.getElementById('truck');
             truck.classList.add('driving-away');
             setTimeout(() => {
-                window.location.href = "https://beacons.ai/arewethereyet.tours";
+                window.location.href = "https://beacons.ai";
             }, 750);
         }
 
         const tourSchedule = [
-            { city: "MILWAUKEE, WI", date: "2026-03-21T12:00:00-05:00", link: "https://www.passionparkent.com/event-details-registration/passion-park-fest-2026" },
-            { city: "MILWAUKEE, WI", date: "2026-03-27T21:00:00-05:00", link: "https://partiful.com/e/x4jq7PgWMfS36XjRg1H6?accept-cohost=e0cff1b1-f67b-4a18-932e-dfc5d937afde" },
-            { city: "CHICAGO, IL",   date: "2026-03-28T21:00:00-05:00", link: "https://getpie.app/plans/cfd582d2-75f1-4470-89b9-dc0eeee445b4?inviter=c80b97c0-52d5-11f0-84e8-2fc773811bb4&utm_campaign=event&utm_link_source=pie&utm_platform=web" },
-            { city: "MONTREAL, QC",  date: "2026-04-02T20:00:00-04:00", link: "https://luma.com/qgdzzdha" },
-            { city: "TORONTO, ON",   date: "2026-04-04T21:00:00-04:00", link: "https://luma.com/bxrgi2yo" }
+            { city: "MILWAUKEE, WI", date: "2026-03-21T12:00:00-05:00", link: "https://www.passionparkent.com" },
+            { city: "MILWAUKEE, WI", date: "2026-03-27T21:00:00-05:00", link: "https://partiful.com" },
+            { city: "CHICAGO, IL",   date: "2026-03-28T21:00:00-05:00", link: "https://getpie.app" },
+            { city: "MONTREAL, QC",  date: "2026-04-02T20:00:00-04:00", link: "https://luma.com" },
+            { city: "TORONTO, ON",   date: "2026-04-04T21:00:00-04:00", link: "https://luma.com" }
         ];
 
         const cityLinkElement = document.getElementById('city-link');
@@ -185,7 +174,7 @@
 
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                window.location.href = "https://beacons.ai/arewethereyet.tours";
+                window.location.href = "https://beacons.ai";
             }
         }
 
